@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div>
+        <div id="toast"></div>
+    </div>
+    <div class="control-layout">
+        <div class="input">
+            <input type="text" class="input-title" placeholder="Nhập tiêu đề">
+            <input type="text" class="input-msg" placeholder="Nhập thông tin muốn hiển thị">
+        </div>
+        <div class="control">
+            <div onclick="showSuccessToast()" class="btn btn--success">
+                Show Success Toast
+            </div>
+            <div onclick="showInfoToast()" class="btn btn--info">
+                Show Info Toast
+            </div>
+            <div onclick="showWarningToast()" class="btn btn--warning">
+                Show Warning Toast
+            </div>
+            <div onclick="showErrorToast()" class="btn btn--error">
+                Show Error Toast
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function toast({
+            title = '',
+            message = '',
+            type = '',
+            duration
+        })  {
+            const main = document.getElementById('toast')
+            if(main) {
+                const toast = document.createElement('div')
+                const icons = {
+                    success: 'fa-check-circle',
+                    info: 'fa-info-circle',
+                    warning: 'fa-exclamation-circle',
+                    error: 'fa-bug'
+                }
+                const icon = icons[type]
+                const delay = (duration / 1000).toFixed(2)
+
+                toast.classList.add('toast', `toast--${type}`)
+                toast.style.animation = `slideInLeft ease .3s, fadeOut linear 1s ${delay}s forwards`
+
+                toast.innerHTML = `
+                    <div class="toast__icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="toast__body">
+                        <h3 class="toast__title">
+                            ${title}
+                        </h3>
+                        <p class="toast__msg">${message}!!!</p>
+                    </div>
+                    <div class="toast__close">
+                        <i class="fas fa-times"></i>
+                    </div>
+                `;
+                main.appendChild(toast)
+
+                const autoRemoveId = setTimeout(function() {
+                    main.removeChild(toast)
+                }, duration)
+
+                toast.onclick = function(e) {
+                    if (e.target.closest('.toast__close')){
+                        main.removeChild(toast)
+                        clearTimeout(autoRemoveId)
+                    }
+                }
+            }
+        }
+
+        function showSuccessToast() {
+            const title = document.querySelector('.input-title').value
+            const msg = document.querySelector('.input-msg').value
+            toast({
+                title: `${title}`,
+                message: `${msg}`,
+                type: 'success',
+                duration: 3000
+            });
+        }
+        function showInfoToast() {
+            const title = document.querySelector('.input-title').value
+            const msg = document.querySelector('.input-msg').value
+            toast({
+                title: `${title}`,
+                message: `${msg}`,
+                type: 'info',
+                duration: 3000
+            });
+        }
+        function showWarningToast() {
+            const title = document.querySelector('.input-title').value
+            const msg = document.querySelector('.input-msg').value
+            toast({
+                title: `${title}`,
+                message: `${msg}`,
+                type: 'warning',
+                duration: 3000
+            });
+        }
+        function showErrorToast() {
+            const title = document.querySelector('.input-title').value
+            const msg = document.querySelector('.input-msg').value
+            toast({
+                title: `${title}`,
+                message: `${msg}`,
+                type: 'error',
+                duration: 3000
+            });
+        }
+    </script>
+</body>
+</html>
